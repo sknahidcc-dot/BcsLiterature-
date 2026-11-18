@@ -79,11 +79,6 @@ object QuizGenerator {
                 correctAnswer = item.authorName.trim()
                 extractor = { it.authorName.trim() }
             }
-            QuizQuestionType.WHICH_WORK -> {
-                prompt = "${item.authorName} এর লেখা কোনটি?"
-                correctAnswer = item.title.trim()
-                extractor = { it.title.trim() }
-            }
             QuizQuestionType.WHICH_GENRE -> {
                 prompt = "'${item.title}' কোন ধরনের সাহিত্য?"
                 correctAnswer = item.genre.trim()

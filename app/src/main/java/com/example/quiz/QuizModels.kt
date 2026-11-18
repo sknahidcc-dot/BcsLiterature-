@@ -15,7 +15,6 @@ enum class QuizPool(val labelBn: String) {
 
 enum class QuizQuestionType {
     WHO_WROTE,   // "'{title}' {genre}টি কার লেখা?" -> options are author names
-    WHICH_WORK,  // "{authorName} এর লেখা কোনটি?" -> options are titles
     WHICH_GENRE  // "'{title}' কোন ধরনের সাহিত্য?" -> options are genres
 }
 
