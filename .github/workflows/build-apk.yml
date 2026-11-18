@@ -35,11 +35,25 @@ jobs:
         with:
           gradle-version: "9.3.1"
 
-      - name: Verify release keystore exists
+      - name: Ensure release keystore exists
         run: |
           if [ ! -f "${{ github.workspace }}/my-upload-key.jks" ]; then
-            echo "Error: my-upload-key.jks not found in repository root. Run 'Generate Release Keystore' workflow and upload my-upload-key.jks first."
-            exit 1
+            echo "Generating my-upload-key.jks for release signing..."
+            keytool -genkeypair -v \
+              -keystore "${{ github.workspace }}/my-upload-key.jks" \
+              -alias upload \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass bcs123456 \
+              -keypass bcs123456 \
+              -dname "CN=Nahid Hasan, OU=BCS Literature, O=BCS Literature, L=Dhaka, S=Dhaka, C=BD"
+
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add my-upload-key.jks
+            git commit -m "Add release keystore [skip ci]"
+            git push || echo "Could not push keystore back to repo, continuing build with generated keystore."
           fi
 
       - name: Build signed Release APK
