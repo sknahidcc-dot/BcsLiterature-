@@ -1,0 +1,6 @@
+{
+  "name": "BCS Literature",
+  "description": "অফলাইন বিসিএস বাংলা ও ইংরেজি সাহিত্য নোট ও কুইজ প্রস্তুতি অ্যাপ",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

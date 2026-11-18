@@ -1,0 +1,49 @@
+name: Build and Release BCS Literature APK
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "9.3.1"
+
+      - name: Build signed Release APK
+        env:
+          KEYSTORE_PATH: ${{ github.workspace }}/my-upload-key.jks
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || 'bcs123456' }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || 'bcs123456' }}
+        run: gradle assembleRelease --no-daemon
+
+      - name: Prepare release APK file
+        run: cp app/build/outputs/apk/release/app-release.apk BCS-Literature.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: BCS Literature v1.0.${{ github.run_number }}
+          body: Automated release build of BCS Literature Android APK.
+          files: BCS-Literature.apk
